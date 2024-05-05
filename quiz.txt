@@ -1,0 +1,52 @@
+﻿import pandas as pd
+
+
+# load excel sheet into pandas database
+file_path = "C:/Users/HP/OneDrive/Desktop/PythonDatabase.xlsx"
+df = pd.read_excel(file_path)
+
+
+# function to display a question
+def display_question(question_row):
+    print("\nQuestion:", question_row['Question'])
+    print("A:", question_row['OptionA'])
+    print("B:", question_row['OptionB'])
+    print("C:", question_row['OptionC'])
+    print("D:", question_row['OptionD'])
+
+
+# function to check answer
+def check_answer(question_row, answer):
+    correct_answer = question_row['Answer']
+    return answer.upper() == correct_answer.upper()
+
+
+# main quiz function
+def quiz(num_questions):
+    score = 0
+    
+    # Printing a random selection of questions, up to 10
+    df_random = df.sample(n=num_questions).reset_index(drop=True)
+    
+    for i in range(num_questions):
+        print("\nQuestion", i + 1, "of", num_questions)
+        display_question(df_random.iloc[i])
+        
+        user_answer = input("Your answer (A/B/C/D): ")
+        if check_answer(df_random.iloc[i], user_answer):
+            print("Correct!")
+            score += 1
+        else:
+            print("Incorrect.")
+            print("Correct answer:", df_random.iloc[i]['Answer'])
+    
+    # Calculate score as a percentage
+    percentage_score = (score / num_questions) * 100
+    print("\nQuiz complete!")
+    print("Your score:", score, "out of", num_questions, f"({percentage_score:.2f}%)")
+
+
+
+
+num_questions = int(input("enter number of question you want to Attempt:"))
+quiz(num_questions)
